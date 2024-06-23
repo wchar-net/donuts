@@ -1,0 +1,26 @@
+.dropdown-menu.icon-dropdown {
+    max-width: 100%; /* 最大宽度为100% */
+    min-width: 100%; /* 最小宽度为100% */
+}
+
+.dropdown-menu.icon-dropdown li {
+    display: inline-block; /* 内联块级元素布局 */
+    width: auto; /* 宽度自适应 */
+    margin-right: 5px; /* 右侧间距 */
+    margin-bottom: 5px; /* 下侧间距 */
+    text-align: center; /* 文本居中 */
+}
+
+.dropdown-menu.icon-dropdown .dropdown-item {
+    padding: 0.25rem 0.5rem; /* 内边距 */
+}
+
+.dropdown-menu.icon-dropdown i {
+    font-size: 1.5rem; /* 图标字体大小 */
+    vertical-align: middle; /* 垂直居中 */
+}
+/* 样式：用于隐藏清空图标 */
+.clear-icon {
+    display: none; /* 初始隐藏 */
+    cursor: pointer; /* 鼠标悬停显示手型 */
+}

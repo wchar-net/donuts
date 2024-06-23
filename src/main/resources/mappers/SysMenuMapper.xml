@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.wchar.donuts.mapper.SysMenuMapper">
+
+    <sql id="sys_menu_column">
+        sm
+        .
+        menu_id
+        ,sm.menu_name ,sm.parent_id ,
+               sm.order_num ,sm.url,sm.target,sm.menu_type ,sm.visible,sm.perms
+             ,sm.icon,sm.create_time ,sm.update_time ,
+               sm.create_by ,sm.update_by ,sm.remark,sm.del_flag
+    </sql>
+
+    <resultMap id="menuResultMap" type="net.wchar.donuts.model.bo.MenuBo">
+        <id property="menuId" column="menu_id"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="url" column="url"/>
+        <result property="target" column="target"/>
+        <result property="menuType" column="menu_type"/>
+        <result property="visible" column="visible"/>
+        <result property="perms" column="perms"/>
+        <result property="icon" column="icon"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="remark" column="remark"/>
+        <result property="delFlag" column="del_flag"/>
+
+        <collection column="menu_id" property="children"
+                    ofType="net.wchar.donuts.model.bo.MenuBo"
+                    select="selectDeptByParentId"></collection>
+    </resultMap>
+
+    <!-- 递归查询子部门 -->
+    <select id="selectDeptByParentId" resultMap="menuResultMap">
+        SELECT   <include refid="sys_menu_column"></include>
+        FROM sys_menu sm
+        WHERE del_flag = 1 and sm.menu_type
+          AND parent_id = #{menuId}
+    </select>
+
+    <select id="getMenuTree" resultMap="menuResultMap">
+        select
+        <include refid="sys_menu_column"></include>
+        from sys_menu sm
+        where sm.del_flag = 1
+        <if test="null != menuId">
+            and sm.menu_id = #{menuId}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,18 @@
+.filter-option-inner-inner{
+    color: black !important;
+}
+.treeButtons{
+    display: flex;
+    justify-content: flex-start;
+}
+.treeButtons .btn {
+    padding: 0.2rem 0.5rem; /* 调整按钮内边距 */
+    font-size: 0.75rem; /* 调整按钮的字体大小 */
+    width: auto; /* 自适应按钮宽度 */
+    height: auto; /* 自适应按钮高度 */
+    line-height: 1; /* 使图标在按钮中垂直居中 */
+}
+.treeButtons .btn i {
+    font-size: 1rem; /* 保持图标的原始大小 */
+    vertical-align: middle; /* 垂直居中 */
+}

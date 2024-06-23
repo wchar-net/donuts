@@ -1,0 +1,4 @@
+.clear-icon {
+    display: none; /* 初始隐藏 */
+    cursor: pointer; /* 鼠标悬停显示手型 */
+}

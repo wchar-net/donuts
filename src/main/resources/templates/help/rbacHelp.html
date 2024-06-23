@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-admin.min.css}">
+</head>
+<body class="bg-body-tertiary py-3">
+<div class="container-fluid">
+    <div class="p-5  mb-4 bg-light rounded-3" style="opacity: 1">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Donuts</h1>
+            <p class="col-md-8 fs-4">权限管理说明</p>
+        </div>
+    </div>
+</div>
+
+<!--回到顶部开始-->
+<a href="javaScript:" class="bsa-back-to-top"><i class='bi bi-arrow-up-short'></i></a>
+<!--回到顶部结束-->
+
+<script th:src="@{/lib/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/lib/jquery/dist/jquery.min.js}"></script>
+<script th:src="@{/lib/overlayscrollbars/browser/overlayscrollbars.browser.es6.min.js}"></script>
+<script th:src="@{/lib/bootstrap-quicktab/dist/js/bootstrap-quicktab.min.js}"></script>
+<script th:src="@{/js/bootstrap-admin.js}"></script>
+<script th:src="@{/lib/sweetalert2/dist/sweetalert2.all.min.js}"></script>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- header start -->
+<head>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-table/dist/bootstrap-table.min.css}">
+    <link rel="stylesheet"
+          th:href="@{/lib/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.css}">
+    <link rel="stylesheet" th:href="@{/lib/eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-select/dist/css/bootstrap-select.min.css}">
+    <link rel="stylesheet" th:href="@{/lib/ztree/ztree_v3/css/zTreeStyle/zTreeStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-admin.min.css}">
+    <link rel="stylesheet" th:href="@{/css/dept/edit-dept.css}">
+</head>
+<!-- header end -->
+<body class="bg-body-tertiary py-3">
+<div class="container-fluid">
+    <!-- 菜单树 start -->
+    <div class="modal fade" id="treeModal" tabindex="-1" role="dialog" aria-labelledby="treeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="treeModalLabel">选择上级部门</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul id="treeDemo" class="ztree"></ul>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 菜单树 end -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <form id="form">
+                <div class="row mb-3">
+                    <label for="deptParentName" class="col-sm-2 col-form-label text-sm-end">上级部门</label>
+                    <div class="col-sm-10 position-relative">
+                        <input type="hidden" name="deptParentId" id="deptParentId">
+                        <input type="text" class="form-control" id="deptParentName" style="cursor: pointer"
+                               onclick="deptTreeClick()" name="deptParentName">
+                        <!-- 清空图标 -->
+                        <i style="margin-right: 20px" class="bi bi-x-circle clear-icon position-absolute top-50 end-0 translate-middle-y"></i>
+                    </div>
+                </div>
+                <input type="hidden" name="deptId" id="deptId">
+                <div class="row mb-3">
+                    <label for="deptName" class="col-sm-2 col-form-label text-sm-end">部门名称</label>
+                    <div class="col-sm-10">
+                        <input placeholder="请输入部门名称" type="text" class="form-control" id="deptName"
+                               name="deptName" value="">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="deptCode" class="col-sm-2 col-form-label text-sm-end">部门编码</label>
+                    <div class="col-sm-10">
+                        <input placeholder="请输入部门名称" type="text" class="form-control" id="deptCode"
+                               name="deptCode" value="">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="deptCode" class="col-sm-2 col-form-label text-sm-end">负责人</label>
+                    <div class="col-sm-10">
+                        <input placeholder="请输入部门负责人" type="text" class="form-control" id="deptLeader"
+                               name="deptLeader" value="">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="deptCode" class="col-sm-2 col-form-label text-sm-end">联系电话</label>
+                    <div class="col-sm-10">
+                        <input placeholder="请输入部门联系电话" type="text" class="form-control" id="deptPhone"
+                               name="deptPhone" value="">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="deptCode" class="col-sm-2 col-form-label text-sm-end">邮箱</label>
+                    <div class="col-sm-10">
+                        <input placeholder="请输入部门邮箱" type="text" class="form-control" id="deptEmail"
+                               name="deptEmail" value="">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="inlineRadio1" class="col-sm-2 col-form-label text-sm-end">部门状态</label>
+                    <div class="col-sm-10 d-flex align-items-center">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="deptStatus" id="inlineRadio1"
+                                   value="1"
+                                   checked>
+                            <label class="form-check-label" for="inlineRadio1">正常</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="deptStatus" id="inlineRadio2"
+                                   value="0">
+                            <label class="form-check-label" for="inlineRadio2">停用</label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-10 offset-sm-2">
+                        <button type="submit" class="btn btn-primary" id="btn-edit-dept">修改</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<!--回到顶部开始-->
+<a href="javaScript:" class="bsa-back-to-top"><i class='bi bi-arrow-up-short'></i></a>
+<!--回到顶部结束-->
+
+<script th:src="@{/lib/jquery/dist/jquery.min.js}"></script>
+<script th:src="@{/lib/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/lib/formvalidation/js/formValidation.js}"></script>
+<script th:src="@{/lib/formvalidation/js/framework/bootstrap.js}"></script>
+<script th:src="@{/lib/formvalidation/js/language/zh_CN.js}"></script>
+<script th:src="@{/lib/formvalidation/js/language/en_US.js}"></script>
+<script th:src="@{/lib/bootstrap-select/dist/js/bootstrap-select.min.js}"></script>
+<script th:src="@{/lib/ztree/ztree_v3/js/jquery.ztree.all.min.js}"></script>
+<script th:src="@{/js/bootstrap-admin.js}"></script>
+<script th:src="@{/js/app.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // const current_user_roles = /*[[${current_user_roles}]]*/ "";
+    /*]]>*/
+</script>
+<script th:src="@{/js/dept/edit-dept.js}"></script>
+</body>
+</html>

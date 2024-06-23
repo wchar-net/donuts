@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-table/dist/bootstrap-table.min.css}">
+    <link rel="stylesheet"
+          th:href="@{/lib/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.css}">
+    <link rel="stylesheet" th:href="@{/lib/eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-select/dist/css/bootstrap-select.min.css}">
+    <link rel="stylesheet" th:href="@{/lib/ztree/ztree_v3/css/zTreeStyle/zTreeStyle.css}">
+    <link rel="stylesheet" th:href="@{/lib/overlayscrollbars/styles/overlayscrollbars.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-admin.min.css}">
+    <link rel="stylesheet" th:href="@{/css/user/user.css}">
+</head>
+<body class="bg-body-tertiary py-3">
+<div class="container-fluid">
+    <!--    布局的容器        -->
+    <div class="bsa-layout1">
+        <div class="bsa-layout1-left">
+            <div class="bsa-chevron-toggle"></div>
+            <div class="card h-100 rounded-0 border-0 shadow-sm">
+                <div class="card-header bg-body rounded-0 treeButtons">
+                    <span style="font-weight: bold">[[#{dept.info}]]</span>
+                    <div style="margin-left: auto">
+                        <button id="refreshTree" class="btn btn-primary">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                        <button  id="toggleExpand" class="btn btn-secondary">
+                            <i class="bi bi-arrows-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body" id="bsa-layout1-scroll-area">
+                   <ul id="ztree-dept" class="ztree"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="bsa-layout1-right">
+            <div class="card h-100 rounded-0 border-0 shadow-sm">
+                <div class="card-header bg-body rounded-0">
+                    [[#{user.info}]]
+                </div>
+                <div class="card-body overflow-auto">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-body py-3">
+                                <form class="row row-cols-sm-auto g-3 align-items-center">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <label for="userName" class="col-sm-auto col-form-label" th:text="#{username}"></label>
+                                            <div class="col">
+                                                <input type="email" class="form-control" id="userName" name="userName">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <label for="userPhone" class="col-sm-auto col-form-label" th:text="#{user.phone}"></label>
+                                            <div class="col">
+                                                <input type="email" class="form-control" id="userPhone" name="userPhone">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <label for="lastLoginDate" class="col-sm-auto col-form-label"
+                                                   th:text="#{last.login.date}"></label>
+                                            <div class="col">
+                                                <input type="text" readonly class="form-control" aria-label="q"
+                                                       th:placeholder="#{last.login.date}"
+                                                       name="lastLoginDate" id="lastLoginDate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <label for="userStatus" class="col-sm-auto col-form-label" th:text="#{user.status}"></label>
+                                            <div class="col">
+                                                <select name="userStatus" id="userStatus" class="selectpicker">
+                                                    <option value="" th:text="#{all}"></option>
+                                                    <option value="1" th:text="#{normal}"></option>
+                                                    <option value="0" th:text="#{deactivate}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 gap-2">
+                                        <button type="button" class="btn btn-light bsa-querySearch-btn">
+                                            <i class="bi bi-search"></i> [[#{search}]]
+                                        </button>
+                                        <button type="button" class="btn btn-light bsa-reset-btn">
+                                            <i class="bi bi-arrow-clockwise"></i> [[#{reset}]]
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-body">
+                                <!--  表格上方左侧的工具条区域    -->
+                                <div id="toolbar" class="d-flex flex-wrap gap-2 mb-2">
+                                    <button th:if="${T(net.wchar.donuts.sys.util.SecurityUtils).hasPermission('sys:user:add')}" class="btn btn-light add-btn"><i class="bi bi-plus"></i> [[#{add.user}]]</button>
+                                    <button th:if="${T(net.wchar.donuts.sys.util.SecurityUtils).hasPermission('sys:user:del')}" class="btn btn-light batch-btn"><i class="bi bi-trash"></i> [[#{batch.del}]]</button>
+                                    <button th:if="${T(net.wchar.donuts.sys.util.SecurityUtils).hasPermission('sys:user:edit')}" class="btn btn-light edit-status-btn"><i class="bi bi-box-arrow-down"></i> [[#{edit.user.status}]]</button>
+                                    <button th:if="${T(net.wchar.donuts.sys.util.SecurityUtils).hasPermission('sys:user:edit')}" class="btn btn-light reset-password"><i class="bi bi-box-arrow-down"> [[#{reset.user.pwd}]]</i></button>
+                                </div>
+                                <input type="hidden" id="assignUserId">
+                                <input type="hidden" id="assignUserName">
+                                <input type="hidden" id="deptId">
+                                <table id="table"></table>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--回到顶部开始-->
+<a href="javaScript:" class="bsa-back-to-top"><i class='bi bi-arrow-up-short'></i></a>
+<!--回到顶部结束-->
+
+
+<script th:src="@{/lib/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/lib/jquery/dist/jquery.min.js}"></script>
+<script th:src="@{/lib/popperjs/core/dist/umd/popper.min.js}"></script>
+<script th:src="@{/lib/eonasdan/tempus-dominus/dist/js/tempus-dominus.min.js}"></script>
+<script th:src="@{/lib/bootstrap-table/dist/bootstrap-table.min.js}"></script>
+<script th:src="@{/lib/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js}"></script>
+<script th:src="@{/lib/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.js}"></script>
+<script th:src="@{/lib/bootstrap-select/dist/js/bootstrap-select.min.js}"></script>
+<script th:src="@{/lib/bootstrap-select/dist/js/i18n/defaults-zh_CN.min.js}"></script>
+<script th:src="@{/lib/ztree/ztree_v3/js/jquery.ztree.all.min.js}"></script>
+<script th:src="@{/lib/overlayscrollbars/browser/overlayscrollbars.browser.es6.min.js}"></script>
+<script th:src="@{/js/bootstrap-admin.js}"></script>
+<script th:src="@{/lib/sweetalert2/dist/sweetalert2.all.min.js}"></script>
+<script th:src="@{/js/app.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const i18n_external = /*[[#{external}]]*/ "";
+    const i18n_inside = /*[[#{inside}]]*/ "";
+    const i18n_male = /*[[#{male}]]*/ "";
+    const i18n_female = /*[[#{female}]]*/ "";
+    const i18n_notSex = /*[[#{not.sex}]]*/ "";
+    const i18n_normal = /*[[#{normal}]]*/ "";
+    const i18n_deactivate = /*[[#{deactivate}]]*/ "";
+    const i18n_userId = /*[[#{user.id}]]*/ "";
+    const i18n_userName = /*[[#{user.name}]]*/ "";
+    const i18n_userOrigin = /*[[#{user.origin}]]*/ "";
+    const i18n_userStatus = /*[[#{user.status}]]*/ "";
+    const i18n_userPhone = /*[[#{user.phone}]]*/ "";
+    const i18n_lastLoginIp = /*[[#{last.login.ip}]]*/ "";
+    const i18n_lastPwdDate = /*[[#{last.pwd.date}]]*/ "";
+    const i18n_op = /*[[#{op}]]*/ "";
+    const i18n_userNick = /*[[#{user.nick}]]*/ "";
+    const i18n_userMail = /*[[#{user.mail}]]*/ "";
+    const i18n_userSex = /*[[#{user.sex}]]*/ "";
+    const i18n_lastLoginDate = /*[[#{last.login.date}]]*/ "";
+    const i18n_updateUser = /*[[#{update.user}]]*/ "";
+    const i18n_updateDel = /*[[#{update.del}]]*/ "";
+    const i18n_assignRole = /*[[#{assign.role}]]*/ "";
+    const i18n_delConfirm = /*[[#{del.confirm}]]*/ "";
+    const current_user_perms = /*[[${current_user_perms}]]*/ '{}';
+    const i18n_deptName = /*[[#{dept.name}]]*/ '{}';
+    const i18n_addUser = /*[[#{add.user}]]*/ "";
+    const i18n_batchDel = /*[[#{batch.del}]]*/ "";
+    const i18n_editUserStatus = /*[[#{edit.user.status}]]*/ "";
+    const i18n_pleaseSelectAtLeastOneRowOfData = /*[[#{please.select.at.least.one.row.of.data}]]*/ "";
+    const i18n_cancel = /*[[#{cancel}]]*/ "";
+    const i18n_ok = /*[[#{confirm}]]*/ "";
+    const i18n_confirmResetPassword = /*[[#{confirm.reset.password}]]*/ "";
+    const i18n_resetPasswordSuccess = /*[[#{reset.password.success}]]*/ "";
+    const i18n_editStatus = /*[[#{edit.status}]]*/ "";
+    const i18n_confirmDel = /*[[#{confirm.del}]]*/ "";
+
+    const i18n_userAdd = /*[[#{user.add}]]*/ "";
+    const i18n_userEdit = /*[[#{user.edit}]]*/ "";
+    /*]]>*/
+</script>
+<script th:src="@{/js/user/user.js}"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- header start -->
+<head>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/lib/jquery-treegrid/css/jquery.treegrid.css}">
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-table/dist/bootstrap-table.min.css}">
+    <link rel="stylesheet"
+          th:href="@{/lib/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.css}">
+    <link rel="stylesheet" th:href="@{/lib/eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-admin.min.css}">
+    <link rel="stylesheet" th:href="@{/css/dept/dept.css}">
+</head>
+<!-- header end -->
+
+<body class="bg-body-tertiary py-3">
+
+<div class="container-fluid">
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-body py-3">
+            <form class="row row-cols-sm-auto g-3 align-items-center" action="#">
+                <input type="hidden" id="editDeptId">
+                <input type="hidden" id="editDeptName">
+                <div class="col-12">
+                    <div class="row">
+                        <label for="deptName" class="col-sm-auto col-form-label">部门名称</label>
+                        <div class="col">
+                            <input type="text" class="form-control" id="deptName" name="deptName">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 gap-2">
+                    <button type="button" class="btn btn-light bsa-querySearch-btn">
+                        <i class="bi bi-search"></i>搜索
+                    </button>
+                    <button type="button" class="btn btn-light bsa-reset-btn">
+                        <i class="bi bi-arrow-clockwise"></i>重置
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="card-body">
+            <div id="toolbar" class="d-flex flex-wrap gap-2 mb-2">
+                <button class="btn btn-primary btn-add"><i class="bi bi-plus"></i> 新增</button>
+                <button class="btn btn-light expandAll"><i class="bi bi-arrows-collapse"></i> 展开/折叠</button>
+            </div>
+            <table id="table" style="word-break:break-all;"></table>
+        </div>
+    </div>
+</div>
+
+<!--回到顶部开始-->
+<a href="javaScript:" class="bsa-back-to-top"><i class='bi bi-arrow-up-short'></i></a>
+<!--回到顶部结束-->
+
+<script th:src="@{/lib/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/lib/jquery/dist/jquery.min.js}"></script>
+<script th:src="@{/lib/jquery-treegrid/js/jquery.treegrid.min.js}"></script>
+<script th:src="@{/lib/bootstrap-table/dist/bootstrap-table.min.js}"></script>
+<script th:src="@{/lib/bootstrap-table/dist/extensions/treegrid/bootstrap-table-treegrid.min.js}"></script>
+<script th:src="@{/lib/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js}"></script>
+<script th:src="@{/lib/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.js}"></script>
+<script th:src="@{/js/bootstrap-admin.min.js}"></script>
+<script th:src="@{/js/app.js}"></script>
+<script th:src="@{/js/dept/dept.js}"></script>
+</body>
+</html>

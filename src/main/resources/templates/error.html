@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/lib/bootstrap/dist/css/bootstrap.min.css}">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .error-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+        .error-details {
+            max-width: 1000px;
+            width: 100%;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .error-details h1 {
+            margin-bottom: 20px;
+        }
+        .info-item {
+            margin-bottom: 10px;
+        }
+        .info-label {
+            font-weight: bold;
+            width: 100px;
+            display: inline-block;
+        }
+        .error {
+            border: 2px solid red;
+            padding: 8px;
+            word-wrap: break-word;
+            max-height: 200px; /* 固定高度 */
+            overflow-y: auto; /* 当内容溢出时显示垂直滚动条 */
+            /* 滚动条样式 */
+            scrollbar-width: thin;
+            scrollbar-color: #888888 #f1f1f1;
+        }
+        .uri {
+            word-wrap: break-word; /* 自动换行 */
+        }
+        /* 美化滚动条 */
+        .error::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .error::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .error::-webkit-scrollbar-thumb {
+            background-color: #888888;
+            border-radius: 4px;
+            border: 2px solid #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+<div class="error-container">
+    <div class="error-details">
+        <h1>Error</h1>
+        <div class="info-item">
+            <span class="info-label">Uri:</span>
+            <div class="uri">[[${requestUri}]]</div>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Msg:</span>
+            <div class="error">
+                [[${msg}]]
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

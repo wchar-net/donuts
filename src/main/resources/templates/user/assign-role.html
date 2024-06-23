@@ -1,0 +1,75 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- header start -->
+<head>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-table/dist/bootstrap-table.min.css}">
+    <link rel="stylesheet"
+          th:href="@{/lib/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.css}">
+    <link rel="stylesheet" th:href="@{/lib/eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css}"/>
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-select/dist/css/bootstrap-select.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-admin.min.css}">
+</head>
+<!-- header end -->
+<body class="bg-body-tertiary py-3">
+<div class="container-fluid">
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-body py-3">
+            <p>
+                <span style="color: red;font-weight: bold">  *可跨页选取*  </span>
+                <span id="assignUserName"></span>
+            </p>
+            <form class="row row-cols-sm-auto g-3 align-items-center" action="#">
+                <div class="col-12">
+                    <div class="row">
+                        <label for="roleName" class="col-sm-auto col-form-label">角色名称</label>
+                        <div class="col">
+                            <input type="text" class="form-control" id="roleName" name="roleName">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 gap-2">
+
+                    <button type="button" class="btn btn-light bsa-querySearch-btn">
+                        <i class="bi bi-search"></i>搜索
+                    </button>
+                    <button type="button" class="btn btn-light bsa-reset-btn">
+                        <i class="bi bi-arrow-clockwise"></i>重置
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="card-body">
+            <table id="table"></table>
+
+        </div>
+        <div class="card-footer bg-body">
+            <button id="assign-btn" class="btn btn-primary btn-submit">确定</button>
+        </div>
+    </div>
+</div>
+<!--回到顶部开始-->
+<a href="javaScript:" class="bsa-back-to-top"><i class='bi bi-arrow-up-short'></i></a>
+
+<script th:src="@{/lib/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/lib/jquery/dist/jquery.min.js}"></script>
+<script th:src="@{/lib/popperjs/core/dist/umd/popper.min.js}"></script>
+<script th:src="@{/lib/eonasdan/tempus-dominus/dist/js/tempus-dominus.min.js}"></script>
+<script th:src="@{/lib/bootstrap-table/dist/bootstrap-table.min.js}"></script>
+<script th:src="@{/lib/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js}"></script>
+<script th:src="@{/lib/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.js}"></script>
+<script th:src="@{/lib/bootstrap-select/dist/js/bootstrap-select.min.js}"></script>
+<script th:src="@{/lib/bootstrap-select/dist/js/i18n/defaults-zh_CN.min.js}"></script>
+<script th:src="@{/js/bootstrap-admin.js}"></script>
+<script th:src="@{/js/app.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+   // const current_user_roles = /*[[${current_user_roles}]]*/ "";
+    /*]]>*/
+</script>
+<script th:src="@{/js/user/assign-role.js}"></script>
+</body>
+</html>

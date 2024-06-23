@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh">
+<!-- header start -->
+<head>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/lib/jquery-treegrid/css/jquery.treegrid.css}">
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-table/dist/bootstrap-table.min.css}">
+    <link rel="stylesheet"
+          th:href="@{/lib/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.css}">
+    <link rel="stylesheet" th:href="@{/lib/eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-admin.min.css}">
+    <style>
+        .bootstrap-table .fixed-table-container .table tbody td {
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<!-- header end -->
+<body class="bg-body-tertiary py-3">
+<div class="container-fluid">
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-body py-3">
+            <form id="form">
+                <div class="row mb-3">
+                    <label for="roleName" class="col-sm-2 col-form-label text-sm-end">角色名称</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="roleName" name="roleName" value="">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="inlineRadio1" class="col-sm-2 col-form-label text-sm-end">角色状态</label>
+                    <div class="col-sm-10 d-flex align-items-center">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="roleStatus" id="inlineRadio1"
+                                   value="1"
+                                   checked>
+                            <label class="form-check-label" for="inlineRadio1">正常</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="roleStatus" id="inlineRadio2"
+                                   value="0">
+                            <label class="form-check-label" for="inlineRadio2">停用</label>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="card-body">
+            <div id="toolbar" class="d-flex flex-wrap gap-2 mb-2">
+                <button class="btn btn-light expandAll"><i class="bi bi-arrows-collapse"></i> 展开/折叠</button>
+            </div>
+            <table id="table" style="word-break:break-all;"></table>
+        </div>
+        <div class="card-footer bg-body">
+            <button class="btn btn-primary submit-btn">确定</button>
+        </div>
+        </form>
+    </div>
+
+    <!--回到顶部开始-->
+    <a href="javaScript:" class="bsa-back-to-top"><i class='bi bi-arrow-up-short'></i></a>
+    <!--回到顶部结束-->
+
+</div>
+
+
+<script th:src="@{/lib/jquery/dist/jquery.min.js}"></script>
+<script th:src="@{/lib/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/lib/formvalidation/js/formValidation.js}"></script>
+<script th:src="@{/lib/formvalidation/js/framework/bootstrap.js}"></script>
+<script th:src="@{/lib/formvalidation/js/language/zh_CN.js}"></script>
+<script th:src="@{/lib/formvalidation/js/language/en_US.js}"></script>
+<script th:src="@{/lib/jquery-treegrid/js/jquery.treegrid.min.js}"></script>
+<script th:src="@{/lib/bootstrap-table/dist/bootstrap-table.min.js}"></script>
+<script th:src="@{/lib/bootstrap-table/dist/extensions/treegrid/bootstrap-table-treegrid.min.js}"></script>
+<script th:src="@{/lib/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js}"></script>
+<script th:src="@{/lib/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.js}"></script>
+<script th:src="@{/js/bootstrap-admin.min.js}"></script>
+<script th:src="@{/js/app.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // const current_user_roles = /*[[${current_user_roles}]]*/ "";
+    /*]]>*/
+</script>
+<script th:src="@{/js/role/edit-role.js}"></script>
+</body>
+</html>

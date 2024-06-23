@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.wchar.donuts.mapper.SysDeptMapper">
+
+    <!-- 查询指定顶级部门 -->
+    <select id="getDeptTree" resultMap="departmentResultMap">
+        SELECT dept_id,
+               dept_parent_id,
+               dept_code,
+               dept_name,
+               dept_leader,
+               dept_phone,
+               dept_email,
+               dept_status
+        FROM sys_dept
+        WHERE del_flag = 1
+          AND dept_id = #{deptId}
+    </select>
+
+    <!-- 递归查询子部门 -->
+    <select id="selectDeptByParentId" resultMap="departmentResultMap">
+        SELECT dept_id,
+               dept_parent_id,
+               dept_code,
+               dept_name,
+               dept_leader,
+               dept_phone,
+               dept_email,
+               dept_status
+        FROM sys_dept
+        WHERE del_flag = 1
+          AND dept_parent_id = #{deptId}
+    </select>
+
+    <!-- 结果映射 -->
+    <resultMap id="departmentResultMap" type="net.wchar.donuts.model.bo.DeptBo">
+        <id property="deptId" column="dept_id"/>
+        <result property="deptParentId" column="dept_parent_id"/>
+        <result property="deptCode" column="dept_code"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="deptLeader" column="dept_leader"/>
+        <result property="deptPhone" column="dept_phone"/>
+        <result property="deptEmail" column="dept_email"/>
+        <result property="deptStatus" column="dept_status"/>
+        <collection column="dept_id" property="children"
+                    ofType="net.wchar.donuts.model.bo.DeptBo"
+                    select="selectDeptByParentId"></collection>
+   </resultMap>
+
+</mapper>

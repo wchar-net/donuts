@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404</title>
+    <link rel="stylesheet" th:href="@{/lib/bootstrap/dist/css/bootstrap.min.css}">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .error-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .error-details {
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .error-details h1 {
+            margin-bottom: 20px;
+        }
+        .error-details table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        .error-details th, .error-details td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+    </style>
+</head>
+<body>
+<div class="error-container">
+    <div class="error-details">
+        <h1>404</h1>
+        <h3>page not found</h3>
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <th style="width: 100px;">code</th>
+                <td style="width: calc(100% - 100px);">404</td>
+            </tr>
+            <tr>
+                <th style="width: 100px;">msg</th>
+                <td style="width: calc(100% - 100px);">page not found</td>
+            </tr>
+            <tr>
+                <th style="width: 100px;">uri</th>
+                <td style="width: calc(100% - 100px);">[[${requestUri}]]
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.wchar.donuts.mapper.SysUserMapper">
+    <insert id="assignUserRole">
+        insert into sys_user_role(user_id, role_id)
+        values
+        <foreach collection="roleId" item="roleId" separator=",">
+            (#{userId}, #{roleId})
+        </foreach>
+    </insert>
+    <insert id="insertUserDept">
+        insert into sys_dept_user(user_id, dept_id, create_by, create_time, del_flag)
+        values (#{userId}, #{deptId}, #{createBy}, #{createTime}, 1)
+    </insert>
+    <delete id="removeOriginUserRole">
+        delete
+        from sys_user_role
+        where user_id = #{userId}
+    </delete>
+
+    <select id="countDeptByUserId" resultType="java.lang.Integer">
+        select count(1)
+        from sys_dept d
+        where d.dept_id in (select sdu.dept_id
+                            from sys_dept_user sdu
+                            where sdu.user_id = #{userId})
+          and d.del_flag = 1
+
+    </select>
+    <select id="getUserMenu" resultType="net.wchar.donuts.model.po.SysMenuPo">
+        select
+        <include refid="sys_menu_column"></include>
+        from sys_menu sm
+        where sm.menu_id in (select srm.menu_id
+        from sys_role_menu srm
+        where srm.role_id in (
+        select
+        sur.role_id
+        from
+        sys_user_role sur ,sys_role sr
+        where
+        sur.user_id = #{userId}
+        and sur.role_id  = sr.role_id
+        and sr.status  = 1
+        and sr.del_flag = 1
+        ))
+        and sm.visible = 1
+        and sm.menu_type in(1,2)
+        and sm.del_flag = 1
+        order by sm.order_num desc
+    </select>
+    <select id="checkMenuPermission" resultType="java.lang.Long">
+        select count(1)
+        from sys_menu sm
+        where sm.menu_id in (select srm.menu_id
+                             from sys_role_menu srm
+                             where srm.role_id in (select sur.role_id
+                                                   from sys_user_role sur
+                                                   where sur.user_id = #{userId}))
+          and sm.visible = 1
+          and sm.menu_type in (1, 2, 3)
+          and sm.perms = #{perms}
+    </select>
+    <select id="getUserAllMenuPermission" resultType="java.lang.String">
+        select sm.perms
+        from sys_menu sm
+        where sm.menu_id in (select srm.menu_id
+                             from sys_role_menu srm
+                             where srm.role_id in (select sur.role_id
+                                                   from sys_user_role sur
+                                                   where sur.user_id = #{userId}))
+          and sm.visible = 1
+          and sm.menu_type in (1, 2, 3)
+          and sm.perms is not null
+    </select>
+    <select id="getAllDept" resultType="net.wchar.donuts.model.bo.DeptBo">
+        select sd.dept_id     as deptId,
+               sd.dept_name   as deptName,
+               sd.dept_code   as deptCode,
+               sd.dept_leader as deptLeader,
+               sd.dept_phone  as deptPhone
+        from sys_dept sd
+        where sd.dept_id in
+              (select sdu.dept_id
+               from sys_dept_user sdu
+               where sdu.user_id = #{userId})
+    </select>
+    <select id="pageUserRole" resultType="net.wchar.donuts.model.bo.RoleBo">
+        select sr.role_id as roleId, sr.role_name as roleName
+        from sys_role sr
+        where sr.del_flag = 1
+        <if test="roleName != null">
+            and sr.role_name like concat('%',#{roleName},'%')
+        </if>
+    </select>
+    <select id="getAllRole" resultType="net.wchar.donuts.model.bo.RoleBo">
+        select sr.role_id as roleId, sr.role_name as roleName
+        from sys_role sr
+        where sr.role_id in (select sur.role_id
+                             from sys_user_role sur
+                             where sur.user_id = #{userId})
+    </select>
+
+    <sql id="userColumn">
+        u
+        .
+        user_id
+        as userId,
+                  u.user_name as userName,
+                  u.user_nick as userNick,
+                  u.user_type as userType,
+                  u.user_email as userEmail,
+                u.user_phone as userPhone,
+                  u.user_sex as userSex,
+                u.user_avatar as userAvatar,
+                  u.user_pwd as userPwd,
+                 u.user_status as userStatus,
+                  u.del_flag as delFlag,
+                u.last_login_ip as lastLoginIp,
+                 u.last_login_date as lastLoginDate,
+                u.last_pwd_update_date as lastPwdUpdateDate,
+                  u.create_by as createBy,
+                u.create_time as createTime,
+                  u.update_by as updateBy,
+                  u.update_time as updateTime,
+                  u.remark
+    </sql>
+    <select id="pageUser" resultType="net.wchar.donuts.model.bo.UserBo" parameterType="net.wchar.donuts.model.vo.PageUserVo">
+        select
+        <include refid="userColumn"></include>,
+        (
+        select sd.dept_name as deptName from sys_dept sd where sd.del_flag = 1
+        and sd.dept_id = (
+        select sdu.dept_id from sys_dept_user sdu where sdu.del_flag = 1
+        and sdu.user_id = u.user_id
+        )
+        )  as deptName
+        from sys_user u where u.user_id in(
+        select du.user_id from sys_dept_user du where du.dept_id in
+        (
+        WITH RECURSIVE DeptHierarchy AS (
+        SELECT dept_id
+        FROM sys_dept
+        WHERE del_flag = 1
+        <if test="vo.deptId != null">
+            and dept_id = #{vo.deptId}
+        </if>
+
+        UNION ALL
+        SELECT d.dept_id
+        FROM sys_dept d
+        JOIN DeptHierarchy h ON d.dept_parent_id = h.dept_id
+        )
+        SELECT dept_id
+        FROM DeptHierarchy))
+        and u.del_flag = 1
+        <if test="null != vo.userName and '' != vo.userName">
+            and u.user_name like concat(#{vo.userName},'%')
+        </if>
+        <if test="null != vo.userSex">
+            and u.user_sex = #{vo.userSex}
+        </if>
+        <if test="null != vo.userStatus">
+            and u.user_status = #{vo.userStatus}
+        </if>
+        <if test="null != vo.lastLoginDate  and '' != vo.lastLoginDate">
+            and DATE(u.last_login_date) = #{vo.lastLoginDate}
+        </if>
+        <if test="null != vo.userPhone and '' != vo.userPhone">
+            and u.user_phone = #{vo.userPhone}
+        </if>
+    </select>
+    <select id="getUserDept" resultType="net.wchar.donuts.model.bo.DeptBo">
+        select sd.dept_status    as deptStatus,
+               sd.dept_email     as deptEmail,
+               sd.dept_phone     as deptPhone,
+               sd.dept_leader    as deptLeader,
+               sd.dept_name      as deptName,
+               sd.dept_code      as deptCode,
+               sd.dept_parent_id as deptParentId,
+               sd.dept_id        as deptId
+        from sys_dept sd
+        where sd.del_flag = 1
+          and sd.dept_id in (select sdu.dept_id
+                             from sys_dept_user sdu
+                             where sdu.user_id = #{userId} and del_flag = 1)
+    </select>
+    <select id="removeUserDept" resultType="java.lang.Integer">
+        update sys_dept_user
+        set del_flag    = 0,
+            update_by   = #{updateBy},
+            update_time = #{updateTime}
+        where user_id = #{userId}
+    </select>
+    <select id="countDeptById" resultType="java.lang.Long">
+        select count(1)
+        from sys_dept sd
+        where sd.del_flag = 1
+          and sd.dept_id = #{deptId}
+    </select>
+    <select id="countUserName" resultType="java.lang.Long">
+        select count(1) from sys_user u where u.del_flag = 1 and u.user_name = #{userName}
+    </select>
+    <sql id="sys_menu_column">
+        sm
+        .
+        menu_id
+        as menuId,
+        sm.menu_name as menuName,sm.parent_id as parentId,
+               sm.order_num as orderNum,sm.url,sm.target,sm.menu_type as menuType,sm.visible,sm.perms
+             ,sm.icon,sm.create_time as createTime,sm.update_time as updateTime,
+               sm.create_by as createBy,sm.update_by as updateBy,sm.remark,sm.del_flag as delFlag
+    </sql>
+
+</mapper>
