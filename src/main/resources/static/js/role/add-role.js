@@ -161,7 +161,7 @@ $(document).ready(function (e) {
 
 
     $("#form").formValidation({
-        locale: lang,
+        locale: getLang(),
         //验证字段
         fields: {
             roleName: {
